@@ -33,9 +33,13 @@
         var p = document.querySelector("#tagToRemove");
         var startButton = document.querySelector("#btnStart");
         var pageContentEl = document.querySelector("#page-content");
-        var keepScore = 0;
-        var playerInitails = null;
-        localStorage.setItem("topScore", "5");
+        var topScore = [];
+        var playerCounter = 0;                
+        var player = {
+            Name: "",
+            Score: 0
+        }
+        // localStorage.setItem("topScore", "5");
 
         var firstQuestion = function(){
             titleChange.innerHTML = "This a test to see if you change"; 
@@ -78,8 +82,8 @@
             document.querySelector("#button2").onclick = function(){
                 console.log("button2 was clicked");
                 secondQuestion();
-                keepScore = keepScore + 10;
-                console.log(keepScore);
+                player.Score = player.Score + 10;
+                console.log(player.Score);
             }
 
             document.querySelector("#button3").onclick = function(){
@@ -138,8 +142,8 @@
 
             document.querySelector("#button3").onclick = function(){
                 console.log("button3 was clicked");
-                keepScore = keepScore + 10;
-                console.log(keepScore);
+                player.Score = player.Score + 10;
+                console.log(player.Score);
                 showResults();
             }
 
@@ -160,7 +164,7 @@
             pageContentEl.appendChild(result);
 
             var displayScore = document.createElement("h1");
-            displayScore.textContent = keepScore;
+            displayScore.textContent = player.Score;
             result.appendChild(displayScore);
             
             var formField = document.createElement("form");
@@ -172,7 +176,29 @@
             textField.id = "textInitials";
             formField.appendChild(textField);
             
+            var submitButton = document.createElement("button");
+            submitButton.id = "submit-btn";
+            submitButton.textContent = "Submit";
+            formField.appendChild(submitButton);
+            
+            document.querySelector("#submit-btn").addEventListener("click", function(event){
+                event.preventDefault();
+                player.Name  = document.querySelector("#textInitials").value;
+                if(player.Name === ""){
+                    alert("Must enter initials to save score");
+                }else{                
+                    
+                    player.id = playerCounter;
+                    topScore.push(player);
 
+                    localStorage.setItem("topScore", JSON.stringify(topScore));
+                    
+                    playerCounter++;
+
+                }
+
+
+            });
             // var startAgainBtn = document.createElement("button");
             // startAgainBtn.textContent = "start Again";
             // result.appendChild(startAgainBtn);
@@ -180,7 +206,7 @@
 
             //need to give option to save result to local storage.
 
-            var topScore = localStorage.getItem("topScore");
+            // var topScore = localStorage.getItem("topScore");
 
 
 
