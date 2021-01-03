@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Quiz</title>
+</head>
+
+<style>
+    .btn-group{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btn{
+        margin: 5px;
+    }
+</style>
+<body>
+    <header>
+
+    </header>
+    <main id="page-content">
+        <di>
+            <h1 class="page-title" id="page-title">Code Quiz</h1>
+            <p id="tagToRemove">Take the quiz and do your best</p>
+            <button class="btn" id="btnStart" type="submit">Start Quiz!</button>
+        </di>
+    
+    </main>    
+    <script>
+        var titleChange = document.querySelector("#page-title");
+        var p = document.querySelector("#tagToRemove");
+        var startButton = document.querySelector("#btnStart");
+        var pageContentEl = document.querySelector("#page-content");
+        var keepScore = 0;
+        var playerInitails = null;
+        localStorage.setItem("topScore", "5");
+
+        var firstQuestion = function(){
+            titleChange.innerHTML = "This a test to see if you change"; 
+            p.remove();
+            startButton.remove();
+
+            var answerGroup = document.createElement("div");
+            answerGroup.className = "btn-group";
+            pageContentEl.appendChild(answerGroup);
+
+            var button1 = document.createElement("button");
+            button1.textContent = "Answer1";
+            button1.className = "btn";
+            button1.id = "button1";
+            answerGroup.appendChild(button1);
+
+            var button2 = document.createElement("button");
+            button2.textContent = "Answer2";
+            button2.className = "btn";
+            button2.id = "button2";
+            answerGroup.appendChild(button2);
+
+            var button3 = document.createElement("button");
+            button3.textContent = "Answer3";
+            button3.className = "btn";
+            button3.id = "button3";
+            answerGroup.appendChild(button3);
+            
+            var button4 = document.createElement("button");
+            button4.textContent = "Answer4";
+            button4.className = "btn button4";
+            button4.id = "button4";
+            answerGroup.appendChild(button4);
+
+            document.querySelector("#button1").onclick = function(){
+                console.log("button1 was clicked");
+                secondQuestion();
+            }
+
+            document.querySelector("#button2").onclick = function(){
+                console.log("button2 was clicked");
+                secondQuestion();
+                keepScore = keepScore + 10;
+                console.log(keepScore);
+            }
+
+            document.querySelector("#button3").onclick = function(){
+                console.log("button3 was clicked");
+                secondQuestion();
+            }
+
+            document.querySelector("#button4").onclick = function(){
+                console.log("this is the correct answer");
+                secondQuestion();
+            }
+
+            
+        };
+
+        var secondQuestion = function(){
+            titleChange.innerHTML = "Second question This a test to see if you change"; 
+
+            document.querySelector("div").remove();
+
+            var answerGroup = document.createElement("div");
+            answerGroup.className = "btn-group";
+            pageContentEl.appendChild(answerGroup);
+
+            var button1 = document.createElement("button");
+            button1.textContent = "Answer1";
+            button1.className = "btn";
+            button1.id = "button1";
+            answerGroup.appendChild(button1);
+
+            var button2 = document.createElement("button");
+            button2.textContent = "Answer2";
+            button2.className = "btn";
+            button2.id = "button2";
+            answerGroup.appendChild(button2);
+
+            var button3 = document.createElement("button");
+            button3.textContent = "Answer3";
+            button3.className = "btn";
+            button3.id = "button3";
+            answerGroup.appendChild(button3);
+            
+            var button4 = document.createElement("button");
+            button4.textContent = "Answer4";
+            button4.className = "btn button4";
+            button4.id = "button4";
+            answerGroup.appendChild(button4);
+
+            document.querySelector("#button1").onclick = function(){
+                console.log("button1 was clicked");
+            }
+
+            document.querySelector("#button2").onclick = function(){
+                console.log("button2 was clicked");
+            }
+
+            document.querySelector("#button3").onclick = function(){
+                console.log("button3 was clicked");
+                keepScore = keepScore + 10;
+                console.log(keepScore);
+                showResults();
+            }
+
+            document.querySelector("#button4").onclick = function(){
+                console.log("this is the correct answer");
+            }
+
+            
+        };
+
+        var showResults = function(){
+            titleChange.innerHTML = "The result below"; 
+
+            document.querySelector("div").remove();
+
+            var result = document.createElement("div");
+            result.className = "resultBox";
+            pageContentEl.appendChild(result);
+
+            var displayScore = document.createElement("h1");
+            displayScore.textContent = keepScore;
+            result.appendChild(displayScore);
+            
+            var formField = document.createElement("form");
+            formField.className = "formBox";
+            formField.innerHTML = "<label for='textIntials'>Enter Intials:</label>"
+            result.appendChild(formField);
+
+            var textField = document.createElement("input");
+            textField.id = "textInitials";
+            formField.appendChild(textField);
+            
+
+            // var startAgainBtn = document.createElement("button");
+            // startAgainBtn.textContent = "start Again";
+            // result.appendChild(startAgainBtn);
+
+
+            //need to give option to save result to local storage.
+
+            var topScore = localStorage.getItem("topScore");
+
+
+
+            // if(keepScore > topScore){
+            //     localStorage.setItem("topScore", keepScore);
+            // }
+
+            // startAgainBtn.addEventListener("click", function(){
+            //     location.reload();   
+            // });
+            
+
+        }        
+        document.querySelector("#btnStart").addEventListener("click", firstQuestion);
+
+        
+        
+                   
+    </script>
+</body>
+</html>
