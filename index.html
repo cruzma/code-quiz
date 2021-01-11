@@ -7,11 +7,35 @@
 </head>
 
 <style>
+    html{
+        height: 100%;
+    }
+    body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+    #page-content{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
     .btn-group{
+        
         display: flex;
         flex-direction: column;
     }
 
+    .btn{
+        width: 100px;
+    }
+    .resultBox{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
     .btn{
         margin: 5px;
     }
@@ -21,12 +45,12 @@
 
     </header>
     <main id="page-content">
-        <di>
-            <h1 class="page-title" id="page-title">Code Quiz</h1>
-            <p id="changeTag">Take the quiz and do your best</p>
-            <button class="btn" id="btnStart" type="submit">Start Quiz!</button>
-        </di>
     
+        <h1 class="page-title" id="page-title">Code Quiz</h1>
+        <p id="changeTag">Take the quiz and do your best</p>
+        <button class="btn" id="btnStart" type="submit">Start Quiz!</button>
+    
+
     </main>    
     <script>
         var titleChange = document.querySelector("#page-title");
@@ -36,14 +60,14 @@
         var topScore = [];
         var playerCounter = 0; 
         var count = 0;
-        var sec = 5;               
+        var sec = 500;               
         var player = {
             Name: "",
             Score: 0
         }
         var questions = [
             {
-                question: "what is 2 + 2?",
+                question: "What is 2 + 2?",
                 answers: [
                     { text: '4', correct: true},
                     { text: '22', correct: false},
@@ -73,11 +97,11 @@
         var timerStart = function(){
             
             var timeDisplay = document.querySelector("#changeTag");
-            timeDisplay.innerText = sec;
+            timeDisplay.innerHTML = sec;
 
             var timer = setInterval(function(){            
                 sec--;
-                timeDisplay.innerHTML = sec;
+                timeDisplay.innerText = "Time Left: " + sec;
                 if(sec < 0){
                     clearInterval(timer);
                     timeDisplay.innerText = "Times Up!";
@@ -98,7 +122,7 @@
                 var timeDisplay = document.querySelector("#changeTag");
                 p.remove();
                 showResults();
-                
+               
            }
             else{         
 
@@ -163,6 +187,7 @@
             
             var submitButton = document.createElement("button");
             submitButton.id = "submit-btn";
+            submitButton.className = "btn";
             submitButton.textContent = "Submit";
             formField.appendChild(submitButton);
             
@@ -173,14 +198,15 @@
                     alert("Must enter initials to save score");
                 }else{                
                     
-                    player.id = playerCounter;
-                    topScore.push(player);
-
-                    localStorage.setItem("topScore", JSON.stringify(topScore));
                     
+                    topScore[playerCounter] = player;
+                    
+                    localStorage.setItem("topScore", JSON.stringify(topScore));   
                     playerCounter++;
 
+                    submitButton.addEventListener("click", tryAgain);
                 }
+                  
 
 
             });
@@ -205,7 +231,27 @@
             
 
         }       
+        var tryAgain = function(){
+            document.querySelector("div").remove();
 
+            var tryAgainBox = document.createElement("div");
+            result.className = "tryAgain";
+            pageContentEl.appendChild(tryAgain);
+
+            var tryAgainText = document.createElement("h1");
+            displayScore.textContent = "Would you Like to try Agian"
+            tryAgainBox.appendChild(tryAgainText);
+
+            var tryAgainButton = document.createElement("button");
+            tryAgainButton.id = "submit-btn";
+            tryAgainButton.className = "btn"
+            tryAgainButton.textContent = "Submit";
+            tryAgainBox.appendChild(tryAgainButton);
+
+            tryAgainButton.addEventListener("click", questionsAndAnswers);
+            tryAgainButton.addEventListener("click", timerStart);
+
+        }
 
         document.querySelector("#btnStart").addEventListener("click", timerStart);
 
