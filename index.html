@@ -51,16 +51,16 @@
         <button class="btn" id="btnStart" type="submit">Start Quiz!</button>
     
 
-    </main>    
+    </main>
     <script>
         var titleChange = document.querySelector("#page-title");
         var p = document.querySelector("#changeTag");
         var startButton = document.querySelector("#btnStart");
         var pageContentEl = document.querySelector("#page-content");
         var topScore = [];
-        var playerCounter = 0; 
+        var playerCounter = 0;
         var count = 0;
-        var sec = 500;               
+        var sec = 500;
         var player = {
             Name: "",
             Score: 0
@@ -97,9 +97,9 @@
         var timerStart = function(){
             
             var timeDisplay = document.querySelector("#changeTag");
-            timeDisplay.innerHTML = sec;
+            timeDisplay.innerHTML = "Time Left: " + sec;
 
-            var timer = setInterval(function(){            
+            var timer = setInterval(function(){
                 sec--;
                 timeDisplay.innerText = "Time Left: " + sec;
                 if(sec < 0){
@@ -108,7 +108,7 @@
                     
                     showResults();
                 }
-            }, 1000) 
+            }, 1000)
       
         }
         var questionsAndAnswers = function(){
@@ -124,7 +124,7 @@
                 showResults();
                
            }
-            else{         
+            else{
 
                 for(var i = 0; i < questions[count].answers.length; i++){
     
@@ -133,7 +133,7 @@
 
                     var button = document.createElement("button");
                     button.innerText = questions[count].answers[i].text;
-                    button.className =  "btn"; 
+                    button.className =  "btn";
                     button.id = "button" + (i+1);
 
                     if(questions[count].answers[i].correct === true){
@@ -144,7 +144,7 @@
                             player.Score = player.Score + 10;
                             console.log(player.Score);
                             
-                            questionsAndAnswers(); 
+                            questionsAndAnswers();
                         });
                     } else if(questions[count].answers[i].correct === false){
                         button.addEventListener("click", function(){
@@ -164,7 +164,7 @@
         };
 
         var showResults = function(){
-            titleChange.innerHTML = "The result below"; 
+            titleChange.innerHTML = "The result below";
 
             document.querySelector("div").remove();
 
@@ -196,15 +196,16 @@
                 player.Name  = document.querySelector("#textInitials").value;
                 if(player.Name === ""){
                     alert("Must enter initials to save score");
-                }else{                
+                }else{
                     
+                    topScore = JSON.parse(localStorage.getItem("topScore")) || [];
                     
-                    topScore[playerCounter] = player;
+                    topScore.push(player);
                     
-                    localStorage.setItem("topScore", JSON.stringify(topScore));   
-                    playerCounter++;
+                    localStorage.setItem("topScore", JSON.stringify(topScore));
+                    
 
-                    submitButton.addEventListener("click", tryAgain);
+                    tryAgain();
                 }
                   
 
@@ -226,30 +227,38 @@
             // }
 
             // startAgainBtn.addEventListener("click", function(){
-            //     location.reload();   
+            //     location.reload();
             // });
             
 
-        }       
+        }
         var tryAgain = function(){
+            document.querySelector("h1").remove();
             document.querySelector("div").remove();
 
             var tryAgainBox = document.createElement("div");
-            result.className = "tryAgain";
-            pageContentEl.appendChild(tryAgain);
+            tryAgainBox.className = "tryAgain";
+            pageContentEl.appendChild(tryAgainBox);
 
             var tryAgainText = document.createElement("h1");
-            displayScore.textContent = "Would you Like to try Agian"
+            tryAgainText.textContent = "Would you Like to try Agian"
             tryAgainBox.appendChild(tryAgainText);
-
+            
+            var tryAgainResult = document.createElement("p");
+            tryAgainResult.textContent = "Final Score: " + player.Name + " - " + player.Score;
+            tryAgainBox.appendChild(tryAgainResult);
+            
             var tryAgainButton = document.createElement("button");
             tryAgainButton.id = "submit-btn";
             tryAgainButton.className = "btn"
-            tryAgainButton.textContent = "Submit";
+            tryAgainButton.textContent = "Yes";
             tryAgainBox.appendChild(tryAgainButton);
+            
+            
 
-            tryAgainButton.addEventListener("click", questionsAndAnswers);
-            tryAgainButton.addEventListener("click", timerStart);
+            tryAgainButton.addEventListener("click", function(){
+              window.location.reload();
+            });
 
         }
 
