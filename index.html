@@ -23,134 +23,119 @@
     <main id="page-content">
         <di>
             <h1 class="page-title" id="page-title">Code Quiz</h1>
-            <p id="tagToRemove">Take the quiz and do your best</p>
+            <p id="changeTag">Take the quiz and do your best</p>
             <button class="btn" id="btnStart" type="submit">Start Quiz!</button>
         </di>
     
     </main>    
     <script>
         var titleChange = document.querySelector("#page-title");
-        var p = document.querySelector("#tagToRemove");
+        var p = document.querySelector("#changeTag");
         var startButton = document.querySelector("#btnStart");
         var pageContentEl = document.querySelector("#page-content");
         var topScore = [];
-        var playerCounter = 0;                
+        var playerCounter = 0; 
+        var count = 0;
+        var sec = 5;               
         var player = {
             Name: "",
             Score: 0
         }
+        var questions = [
+            {
+                question: "what is 2 + 2?",
+                answers: [
+                    { text: '4', correct: true},
+                    { text: '22', correct: false},
+                    { text: '10', correct: false},
+                    { text: '2', correct: false}
+                ]
+
+                
+            },
+
+            {
+                question: "what is 1 + 1",
+                answers: [
+                    { text: '4', correct: false},
+                    { text: '11', correct: false},
+                    { text: '3', correct: false},
+                    { text: '2', correct: true}
+                ]
+            }
+        ];
         // localStorage.setItem("topScore", "5");
 
-        var firstQuestion = function(){
-            titleChange.innerHTML = "This a test to see if you change"; 
-            p.remove();
+        var startGame = function(){
+            console.log("started");
+        }
+
+        var timerStart = function(){
+            
+            var timeDisplay = document.querySelector("#changeTag");
+            timeDisplay.innerText = sec;
+
+            var timer = setInterval(function(){            
+                sec--;
+                timeDisplay.innerHTML = sec;
+                if(sec < 0){
+                    clearInterval(timer);
+                    timeDisplay.innerText = "Times Up!";
+                    
+                    showResults();
+                }
+            }, 1000) 
+      
+        }
+        var questionsAndAnswers = function(){
             startButton.remove();
-
             var answerGroup = document.createElement("div");
             answerGroup.className = "btn-group";
             pageContentEl.appendChild(answerGroup);
-
-            var button1 = document.createElement("button");
-            button1.textContent = "Answer1";
-            button1.className = "btn";
-            button1.id = "button1";
-            answerGroup.appendChild(button1);
-
-            var button2 = document.createElement("button");
-            button2.textContent = "Answer2";
-            button2.className = "btn";
-            button2.id = "button2";
-            answerGroup.appendChild(button2);
-
-            var button3 = document.createElement("button");
-            button3.textContent = "Answer3";
-            button3.className = "btn";
-            button3.id = "button3";
-            answerGroup.appendChild(button3);
             
-            var button4 = document.createElement("button");
-            button4.textContent = "Answer4";
-            button4.className = "btn button4";
-            button4.id = "button4";
-            answerGroup.appendChild(button4);
-
-            document.querySelector("#button1").onclick = function(){
-                console.log("button1 was clicked");
-                secondQuestion();
-            }
-
-            document.querySelector("#button2").onclick = function(){
-                console.log("button2 was clicked");
-                secondQuestion();
-                player.Score = player.Score + 10;
-                console.log(player.Score);
-            }
-
-            document.querySelector("#button3").onclick = function(){
-                console.log("button3 was clicked");
-                secondQuestion();
-            }
-
-            document.querySelector("#button4").onclick = function(){
-                console.log("this is the correct answer");
-                secondQuestion();
-            }
-
             
-        };
-
-        var secondQuestion = function(){
-            titleChange.innerHTML = "Second question This a test to see if you change"; 
-
-            document.querySelector("div").remove();
-
-            var answerGroup = document.createElement("div");
-            answerGroup.className = "btn-group";
-            pageContentEl.appendChild(answerGroup);
-
-            var button1 = document.createElement("button");
-            button1.textContent = "Answer1";
-            button1.className = "btn";
-            button1.id = "button1";
-            answerGroup.appendChild(button1);
-
-            var button2 = document.createElement("button");
-            button2.textContent = "Answer2";
-            button2.className = "btn";
-            button2.id = "button2";
-            answerGroup.appendChild(button2);
-
-            var button3 = document.createElement("button");
-            button3.textContent = "Answer3";
-            button3.className = "btn";
-            button3.id = "button3";
-            answerGroup.appendChild(button3);
-            
-            var button4 = document.createElement("button");
-            button4.textContent = "Answer4";
-            button4.className = "btn button4";
-            button4.id = "button4";
-            answerGroup.appendChild(button4);
-
-            document.querySelector("#button1").onclick = function(){
-                console.log("button1 was clicked");
-            }
-
-            document.querySelector("#button2").onclick = function(){
-                console.log("button2 was clicked");
-            }
-
-            document.querySelector("#button3").onclick = function(){
-                console.log("button3 was clicked");
-                player.Score = player.Score + 10;
-                console.log(player.Score);
+           if(count === questions.length){
+                var timeDisplay = document.querySelector("#changeTag");
+                p.remove();
                 showResults();
-            }
+                
+           }
+            else{         
 
-            document.querySelector("#button4").onclick = function(){
-                console.log("this is the correct answer");
-            }
+                for(var i = 0; i < questions[count].answers.length; i++){
+    
+                    titleChange.textContent = questions[count].question;
+                    
 
+                    var button = document.createElement("button");
+                    button.innerText = questions[count].answers[i].text;
+                    button.className =  "btn"; 
+                    button.id = "button" + (i+1);
+
+                    if(questions[count].answers[i].correct === true){
+                        button.addEventListener("click", function(){
+                            console.log(" aim the right answer");
+                            document.querySelector("div").remove();
+                            count++;
+                            player.Score = player.Score + 10;
+                            console.log(player.Score);
+                            
+                            questionsAndAnswers(); 
+                        });
+                    } else if(questions[count].answers[i].correct === false){
+                        button.addEventListener("click", function(){
+                            console.log("this is the worng answer");
+                            document.querySelector("div").remove();
+                            count++;
+                            sec = sec - 20;
+                            questionsAndAnswers();
+                        });
+                    }
+                    
+                    answerGroup.appendChild(button);
+
+                }
+            }
             
         };
 
@@ -219,8 +204,12 @@
             // });
             
 
-        }        
-        document.querySelector("#btnStart").addEventListener("click", firstQuestion);
+        }       
+
+
+        document.querySelector("#btnStart").addEventListener("click", timerStart);
+
+        document.querySelector("#btnStart").addEventListener("click", questionsAndAnswers);
 
         
         
